@@ -1,76 +1,26 @@
 #include <iostream>
-#include <vector>
+#include "searcher.h"
+
 
 using namespace std;
 
-int linear_search(int array[], int array_size, int number)
+int binary_search(int array[], int size, int desired_number)
 {
-    for (size_t i=0; i < array_size; ++i)
-        if (array[i] == number)
-            return i;
+    int left = 0;
+    int right = size - 1;
+    while (left <= right) {
+        int mid = (left + right) / 2;
+        int number = array[mid];
 
-    return -1;
-}
-
-template <typename ForwardIt, typename T, typename Compare>
-constexpr ForwardIt fast_binary_search(ForwardIt first, ForwardIt last, const T &value, Compare comp) {
-    auto lenght = last - first;
-    while (lenght > 0) {
-        auto rem = lenght % 2;
-        lenght /= 2;
-        if (comp(first[lenght], value)) {
-            first += lenght + rem;
-        }
-    }
-
-    return first;
-}
-
-template <typename T>
-int binary_search(const std::vector<T> &sorted_array, const T &desired_value)
-{
-    int32_t left_index = 0;
-    int32_t right_index = sorted_array.size() - 1;
-    while (left_index <= right_index) {
-        size_t middle_index = (left_index + right_index) / 2;
-        T value = sorted_array[middle_index];
-
-        if (desired_value == value)
-            return middle_index;
-
-        if (desired_value < value)
-            right_index = middle_index - 1;
-        else
-            left_index = middle_index + 1;
-    }
-
-    return -1;
-}
-
-/*int binary_search(int array[], int array_size, int number)
-{
-    return -1;
-}
-*/
-
-int binary_search(const std::vector<int> &sorted_array, const int &desired_number)
-{
-    int_fast32_t left_index = 0;
-    int_fast32_t right_index = sorted_array.size() - 1;
-
-    while (left_index <= right_index) {
-        int middle_index = (left_index + right_index) / 2;
-        int number = sorted_array[middle_index];
-
-        std::cout << "left_index = " << left_index << " right_index = " << right_index << " middle_index = " << middle_index << " number = " << number << std::endl;
+        std::cout << left << " " << right << " " << mid << " " << number << '\n';
 
         if (number == desired_number)
-            return middle_index;
+            return mid;
 
-        if (number > desired_number)
-            right_index = middle_index - 1;
+        if (number < desired_number)
+            left = mid + 1;
         else
-            left_index = middle_index + 1;
+            right = mid - 1;
     }
 
     return -1;
@@ -78,18 +28,23 @@ int binary_search(const std::vector<int> &sorted_array, const int &desired_numbe
 
 int main()
 {
+    Searcher s;
     const int size = 10;
     int array[size] = {55, 21, 45, 1, 31, 10, 666, 13, 24, 5};
-    int result = linear_search(array, size, 666);
+    int sorted_array[size] = {1, 5, 10, 13, 21, 24, 31, 45, 55, 666};
+    int result = s.linear_search(sorted_array, size, 666);
     std::cout << "Linear search: the index of number is " << result << std::endl;
-    std::vector<int> test = {5, 10, 31, 66, 88, 111, 666, 777};
 
+    result = binary_search(sorted_array, size, 24);
+    std::cout << "Binary search: the index of number is " << result << std::endl;
+
+    /*std::vector<int> test = {5, 10, 31, 66, 88, 111, 666, 777};
     std::vector<double> test1 = {5.1, 10.1, 31.1, 66.6, 88.8, 111, 666, 777};
 
-    result = binary_search(test, 4);
+    result = s.binary_search(test, 4);
     std::cout << "Binary seacrh: the index of number is " << result << std::endl;
 
-    /*result = binary_search(test1, 66.6);
+    result = binary_search(test1, 66.6);
     std::cout << "Binary seacrh: the index of number is " << result << std::endl;
 
     auto compareFunc = [](int a, int b){ return a < b;};
