@@ -73,6 +73,7 @@ Thumbs.db
 
 # Build files
 c++/build/*
+build/*
 
 # CMake user files
 *.user
